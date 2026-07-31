@@ -1,3 +1,6 @@
+const bcrypt = require("bcryptjs");
+const { createUser, findUserByEmail } = require("../models/userModel");
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -40,11 +43,14 @@ const registerUser = async (req, res) => {
         });
       });
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: error.message,
     });
   }
+};
+
+module.exports = {
+  registerUser,
 };
