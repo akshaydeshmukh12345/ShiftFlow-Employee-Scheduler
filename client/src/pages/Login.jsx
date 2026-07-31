@@ -1,19 +1,70 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
 function Login() {
-  // State to store email and password
+  // ==========================
+  // State
+  // ==========================
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Function to handle form submission
-  const handleLogin = (e) => {
+  // ==========================
+  // Navigation
+  // ==========================
+  const navigate = useNavigate();
+
+  // ==========================
+  // Login Function
+  // ==========================
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Email:", email);
-    console.log("Password:", password);
+    console.log("1. Button Clicked");
+    console.log("2. Email:", email);
+    console.log("3. Password:", password);
+
+    try {
+      console.log("4. Sending Request...");
+
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log("5. Response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      // Save JWT Token
+      localStorage.setItem("token", data.token);
+
+      console.log("6. Token Saved");
+
+      alert(data.message);
+
+      console.log("7. Navigating to Dashboard...");
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert(error.message || "Login Failed");
+    }
   };
 
+  // ==========================
+  // UI
+  // ==========================
   return (
     <div className="login-container">
       <div className="login-card">
@@ -30,6 +81,7 @@ function Login() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -41,10 +93,13 @@ function Login() {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
-          <button type="submit">Login</button>
+          <button type="submit">
+            Login
+          </button>
         </form>
       </div>
     </div>
