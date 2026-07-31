@@ -1,3 +1,5 @@
+const indexRoutes = require("./routes");
+
 const authRoutes = require("./routes/authRoutes");
 
 const db = require("./config/db");
@@ -9,6 +11,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api", indexRoutes);
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
