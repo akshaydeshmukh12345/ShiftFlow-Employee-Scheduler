@@ -38,7 +38,53 @@ const getAllEmployees = (callback) => {
   db.query(sql, callback);
 };
 
+const getEmployeeById = (id, callback) => {
+  const sql = `
+    SELECT
+      id,
+      name,
+      email,
+      phone,
+      role,
+      department,
+      created_at
+    FROM employees
+    WHERE id = ?
+  `;
+
+  db.query(sql, [id], callback);
+};
+
+const updateEmployee = (
+  id,
+  name,
+  email,
+  phone,
+  role,
+  department,
+  callback
+) => {
+  const sql = `
+    UPDATE employees
+    SET
+      name = ?,
+      email = ?,
+      phone = ?,
+      role = ?,
+      department = ?
+    WHERE id = ?
+  `;
+
+  db.query(
+    sql,
+    [name, email, phone, role, department, id],
+    callback
+  );
+};
+
 module.exports = {
   createEmployee,
   getAllEmployees,
+  getEmployeeById,
+  updateEmployee,
 };
