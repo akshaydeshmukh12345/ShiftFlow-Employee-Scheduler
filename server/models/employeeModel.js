@@ -82,9 +82,19 @@ const updateEmployee = (
   );
 };
 
+const deleteEmployee = (id, callback) => {
+  const sql = `
+    DELETE FROM employees
+    WHERE id = ?
+  `;
+
+  db.query(sql, [id], callback);
+};
+
 module.exports = {
   createEmployee,
   getAllEmployees,
   getEmployeeById,
   updateEmployee,
+  deleteEmployee,
 };

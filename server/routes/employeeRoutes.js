@@ -8,6 +8,7 @@ const {
   fetchEmployees,
   fetchEmployeeById,
   editEmployee,
+  removeEmployee,
 } = require("../controllers/employeeControllers");
 
 // Add Employee
@@ -19,5 +20,7 @@ router.get("/", verifyToken, fetchEmployees);
 router.get("/:id", verifyToken, fetchEmployeeById);
 
 router.put("/:id", verifyToken, editEmployee);
+
+router.delete("/:id", verifyToken, removeEmployee);
 
 module.exports = router;

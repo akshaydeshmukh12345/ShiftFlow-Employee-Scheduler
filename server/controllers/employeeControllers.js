@@ -3,6 +3,7 @@ const {
   getAllEmployees,
   getEmployeeById,
   updateEmployee,
+  deleteEmployee,
 } = require("../models/employeeModel");
 
 const addEmployee = (req, res) => {
@@ -113,9 +114,35 @@ const editEmployee = (req, res) => {
   );
 };
 
+const removeEmployee = (req, res) => {
+  const { id } = req.params;
+
+  deleteEmployee(id, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Employee deleted successfully",
+    });
+  });
+};
+
 module.exports = {
   addEmployee,
   fetchEmployees,
   fetchEmployeeById,
   editEmployee,
+  removeEmployee,
 };
