@@ -55,9 +55,13 @@ const registerUser = async (req, res) => {
 const jwt = require("jsonwebtoken");
 
 const loginUser = (req, res) => {
+  console.log("===== LOGIN REQUEST RECEIVED =====");
+  console.log("Body:", req.body);
+
   const { email, password } = req.body;
 
   if (!email || !password) {
+    console.log("Missing email or password");
     return res.status(400).json({
       success: false,
       message: "Email and Password are required",
@@ -65,12 +69,17 @@ const loginUser = (req, res) => {
   }
 
   findUserByEmail(email, async (err, result) => {
+    console.log("Database callback reached");
+
     if (err) {
+      console.log("Database Error:", err);
       return res.status(500).json({
         success: false,
         message: err.message,
       });
     }
+
+    console.log("Result:", result);
 
     if (result.length === 0) {
       return res.status(401).json({
@@ -81,7 +90,11 @@ const loginUser = (req, res) => {
 
     const user = result[0];
 
+    console.log("Comparing password...");
+
     const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log("Password Match:", isMatch);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -90,18 +103,29 @@ const loginUser = (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1d",
-      }
-    );
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
-    res.status(200).json({
+if (!process.env.JWT_SECRET) {
+  return res.status(500).json({
+    success: false,
+    message: "JWT_SECRET is missing from .env",
+  });
+}
+
+const token = jwt.sign(
+  {
+    id: user.id,
+    email: user.email,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "1d",
+  }
+);
+
+    console.log("Sending Response");
+
+    return res.status(200).json({
       success: true,
       message: "Login Successful",
       token,
