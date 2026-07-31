@@ -1,3 +1,5 @@
+const employeeRoutes = require("./routes/employeeRoutes");
+
 const indexRoutes = require("./routes");
 
 const authRoutes = require("./routes/authRoutes");
@@ -13,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api", indexRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/employees", employeeRoutes);
 
 app.get("/", (req, res) => {
   res.send("🚀 ShiftFlow Backend Running...");
