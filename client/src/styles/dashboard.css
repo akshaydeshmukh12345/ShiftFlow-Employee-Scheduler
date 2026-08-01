@@ -1,0 +1,20 @@
+/* ===========================
+   Dashboard
+=========================== */
+
+.page-title {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.page-subtitle {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
